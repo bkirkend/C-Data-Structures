@@ -17,7 +17,6 @@ heap* heap_init(int cap){
   return h;
 }
 
-
 heap* heap_init_arr(int* arr, int size){
   //can check here if allocation is null
   heap *h = (heap *) malloc(sizeof(heap));
@@ -46,7 +45,6 @@ heap* heap_init_arr(int* arr, int size){
   return h;
 }
 
-
 int heap_pop(heap* h){
   int ret = h->arr[0];
 
@@ -58,12 +56,10 @@ int heap_pop(heap* h){
   return ret;
 }
 
-
 int heap_top(heap *h){
   //must validate that heap is size >= 1 before using
   return h->arr[0];
 }
-
 
 void heap_push(heap *h, int ele) {
   if(h->size == h->cap){
@@ -76,14 +72,12 @@ void heap_push(heap *h, int ele) {
   upward_heapify(h, h->size - 1);
 }
 
-
 void heap_free(heap *h){
   if(h != NULL){
     free(h->arr);
     free(h);
   }
 }
-
 
 void heap_print(heap *h){
   int height = 1;
@@ -153,7 +147,6 @@ static void upward_heapify(heap* h, int idx){
   }
 }
 
-
 static void downward_heapify(heap *h, int idx){
   for(;;){
     int left_idx = left_child(idx); 
@@ -176,6 +169,3 @@ static void downward_heapify(heap *h, int idx){
 
   }
 }
-
-
-

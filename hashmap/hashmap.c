@@ -1,6 +1,6 @@
 #include "hashmap.h"
 
-static void* mem_dup(var_type type, void *ptr){
+static void* mem_dup(var_type type, const void *const ptr){
   void* copy = NULL;
   switch(type){
     case TYPE_INT: 
@@ -32,7 +32,7 @@ static void* mem_dup(var_type type, void *ptr){
   }
 }
 
-static int keys_are_equal(hashmap* h, void* key_a, void* key_b){
+static int keys_are_equal(const hashmap *const h, const void *const key_a, const void *const key_b){
   switch(h->key_type){
     case TYPE_INT: 
       return *(int*)key_a == *(int *)key_b; 
@@ -153,7 +153,7 @@ hashmap* hashmap_init_n(unsigned int num_bins, var_type key_type, var_type value
   return hmap;
 }
 
-void hashmap_free(hashmap *hashmap){
+void hashmap_free(hashmap *const hashmap){
   for(int i = 0; i < hashmap->num_bins; i++){
     hash_entry *prev;
     hash_entry *curr_entry = hashmap->bin_list[i];
@@ -167,7 +167,7 @@ void hashmap_free(hashmap *hashmap){
   free(hashmap);
 }
 
-static hash_entry *hash_entry_init(hashmap *hashmap, void *key, void *value){
+static hash_entry *hash_entry_init(hashmap *const hashmap, void *key, void *value){
   hash_entry* h = malloc(sizeof(hash_entry));
   if(h == NULL){
     printf("Could not allocate hash_entry\n");
@@ -179,13 +179,13 @@ static hash_entry *hash_entry_init(hashmap *hashmap, void *key, void *value){
   return h;
 }
 
-static void hash_entry_free(hash_entry *h){
+static void hash_entry_free(hash_entry *const h){
   free(h->key);
   free(h->value);
   free(h);
 }
 
-void hashmap_insert(hashmap *hashmap, void *key, void *value){ 
+void hashmap_insert(hashmap *const hashmap, void *key, void *value){
   unsigned int bin = (hashmap->hash_func)(key, hashmap->num_bins);
   hash_entry* bin_head = hashmap->bin_list[bin];
   hash_entry* curr_entry = bin_head;
@@ -203,7 +203,7 @@ void hashmap_insert(hashmap *hashmap, void *key, void *value){
   hashmap->bin_list[bin] = new_entry;
 }
 
-void* hashmap_get(hashmap *hashmap, void *key){
+void* hashmap_get(const hashmap *const hashmap, void *key){
   unsigned int bin = (hashmap->hash_func)(key, hashmap->num_bins);
   hash_entry* curr_entry = hashmap->bin_list[bin];
   while(curr_entry && !keys_are_equal(hashmap, key, curr_entry->key)){
@@ -213,7 +213,7 @@ void* hashmap_get(hashmap *hashmap, void *key){
   return curr_entry->value;
 }
 
-void hashmap_print(hashmap *hashmap){
+void hashmap_print(const hashmap *const hashmap){
   for(int i = 0; i < hashmap->num_bins; i++){
     hash_entry *curr_entry = hashmap->bin_list[i];
     while(curr_entry){
@@ -224,7 +224,7 @@ void hashmap_print(hashmap *hashmap){
 }
 
 //NOTE: can add custom print func support -> need initializer with fxns
-static void print_data(var_type key_type, var_type value_type, hash_entry *h){
+static void print_data(const var_type key_type, const var_type value_type, const hash_entry *const h){
   void *key = h->key;
   void *value = h->value;
   switch(key_type){
@@ -271,7 +271,7 @@ static void print_data(var_type key_type, var_type value_type, hash_entry *h){
   }
 }
 
-void hashmap_remove(hashmap *hashmap, void* key){
+void hashmap_remove(hashmap *const hashmap, void* key){
   unsigned int bin = (hashmap->hash_func)(key, hashmap->num_bins);
   hash_entry* prev_entry = NULL;
   hash_entry* curr_entry = hashmap->bin_list[bin];
