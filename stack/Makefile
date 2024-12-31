@@ -1,14 +1,12 @@
-CC=gcc
+CC= gcc
 CFLAGS= -Werror
 EXE= out
-DEPS= stack.h
-OBJ= main.o stack.o 
+SOURCES= src/stack.c \
+				 int/stack_int.c \
+				 main.c
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-$(EXE): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+$(EXE): clean
+	$(CC) $(SOURCES) $(CFLAGS) -o $@
 
 memory: $(EXE)
 	leaks --atExit -- ./$(EXE)
